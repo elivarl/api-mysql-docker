@@ -1,0 +1,55 @@
+
+Tutorial API REST Spring Boot, MySQL y DOCKER, 2 contenedores | Ejemplo paso a paso
+
+Objetivos:
+- Configurar el archivo Dockerfile
+- Configurar un contenedor para desplegar una aplicacion spring boot
+- Configurar un contenedor para levantar mysql 
+- Conectar 2 contenedores (aplicacion y mysql)
+
+Prerequisitos
+- Intellij IDEA
+- JDK 21
+- Postman
+- Docker Desktop
+- Creada la API RESTful
+
+
+Pasos:
+1. Crear la red para que se puedan conectar los 2 contenedores
+	#ver las redes disponibles
+	docker network ls
+	
+	#Para eliminar la red denominada my-network
+	docker network rm my-network
+
+	#crear la red
+	docker network create api_network 
+	
+2. Crear la imagen de mysql, el contenedor y la bdd
+	#Crear la imagen de mysql
+	docker pull mysql
+	
+	#Ejecutar el contenedor
+	docker run -d --name mysqldb --network api_network -p 3305:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:latest
+	
+	# Acceder al contenedor de MySQL
+	docker exec -it mysqldb mysql -u root -p
+	
+	#Mostrar las BDD
+	show databases;
+	
+	#Crear la BDD bankdb
+	create database bankdb
+	
+3. Crear la imagen para el contenedor de la aplicacion
+	# Crear la imagen basado en el dockerfile
+	docker build -t spring .     
+	
+	#Ejecutar el contenedor para la aplicacion
+	 docker run -d --name sprinboot --network api_network -p 8080:8080 spring:latest
+
+4. Probar con Postman
+	#Json para crear una cuenta
+
+
